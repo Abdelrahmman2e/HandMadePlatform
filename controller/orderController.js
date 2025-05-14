@@ -5,8 +5,10 @@ const AppError = require("../utils/AppError");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const { getAll } = require("./handlersFactory");
+
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const axios = require("axios");
+const ApiFeatures = require("../utils/ApiFeatures");
 
 exports.createCashOrder = asyncHandler(async (req, res, nxt) => {
   let taxPrice = 0,
@@ -73,11 +75,59 @@ exports.createCashOrder = asyncHandler(async (req, res, nxt) => {
   });
 });
 
+// exports.findAllOrders = getAll(Order);
+exports.findAllOrders = asyncHandler(async (req, res, next) => {
+  let filter = {};
 
+  // Regular user: get only their orders
+  if (req.user.role === "user") {
+    filter.user = req.user.id;
+  }
 
-exports.findAllOrders = getAll(Order);
+  let baseQuery = Order.find(filter).populate({
+    path: "cartItems.product",
+    select: "title price artisan",
+    populate: {
+      path: "artisan",
+      select: "name email",
+    },
+  });
 
-// exports.getOrder = getOne(Order);
+  // Apply API features (pagination, sort, filter, fields)
+  const apiFeatures = new ApiFeatures(baseQuery, req.query)
+    .filter()
+    .sort()
+    .fieldsLimit();
+
+  // Get total count before pagination
+  const total = await Order.countDocuments(filter);
+
+  // Apply pagination
+  await apiFeatures.paginate(total);
+
+  let { mongooseQuery, paginationResult } = apiFeatures;
+
+  let orders = await mongooseQuery;
+
+  // Artisan: filter orders to only those containing their products
+  if (req.user.role === "artisan") {
+    orders = orders.filter((order) =>
+      order.cartItems.some(
+        (item) =>
+          item.product &&
+          item.product.artisan &&
+          item.product.artisan._id.toString() === req.user.id.toString()
+      )
+    );
+  }
+
+  res.status(200).json({
+    status: "success",
+    results: orders.length,
+    paginationResult,
+    data: orders,
+  });
+});
 
 exports.updateOrderToPaid = asyncHandler(async (req, res, nxt) => {
   const order = await Order.findById(req.params.id);
