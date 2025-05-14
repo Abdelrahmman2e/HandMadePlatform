@@ -5,10 +5,11 @@ const ApiFeatures = require("../utils/ApiFeatures");
 exports.getAll = (Model, modelName = "") =>
   asyncHandler(async (req, res, nxt) => {
     let filter = {};
+    
     if (req.filterObj) {
       filter = req.filterObj;
     }
-    // const subCategories = await Subcategory.find(req.filterObj)
+    
     const apiFeature = new ApiFeatures(Model.find(filter), req.query)
       .filter()
       .fieldsLimit()
@@ -65,6 +66,7 @@ exports.updateOne = (Model) =>
     if (!document) {
       return nxt(new AppError(`No document found with that ID :${id}`, 404));
     }
+    
 
     res.status(200).json({ status: "Success", data: document });
   });

@@ -6,6 +6,8 @@ const {
   createCategory,
   deleteCategory,
   updateCategory,
+  uploadCategoryImage,
+  resizeImage,
 } = require("../controller/categoryController");
 
 const {
@@ -27,9 +29,11 @@ router
   .route("/")
   .get(getCategories)
   .post(
-    createCategoryValidator,
     protect,
     restrictTo("admin", "artisan"),
+    uploadCategoryImage,
+    resizeImage,
+    createCategoryValidator,
     createCategory
   );
 router
@@ -45,6 +49,8 @@ router
     updateCategoryValidator,
     protect,
     restrictTo("admin", "artisan"),
+    uploadCategoryImage,
+    resizeImage,
     updateCategory
   );
 

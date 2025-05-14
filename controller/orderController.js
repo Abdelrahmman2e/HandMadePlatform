@@ -6,6 +6,7 @@ const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const { getAll } = require("./handlersFactory");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const axios = require("axios");
 
 exports.createCashOrder = asyncHandler(async (req, res, nxt) => {
   let taxPrice = 0,
@@ -71,6 +72,8 @@ exports.createCashOrder = asyncHandler(async (req, res, nxt) => {
     data: order,
   });
 });
+
+
 
 exports.findAllOrders = getAll(Order);
 
@@ -138,6 +141,20 @@ exports.getUserOrders = asyncHandler(async (req, res, nxt) => {
   });
 });
 
+async function getDollarToEgpRate() {
+  let UsdToEgp;
+  try {
+    const res = await axios.get(
+      "https://v6.exchangerate-api.com/v6/31d837d859a38ba0f5ed4e96/latest/USD"
+    );
+    UsdToEgp = res.data.conversion_rates.EGP;
+    return UsdToEgp;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+}
+
 const createCardOrder = asyncHandler(async (session) => {
   const cartId = session.client_reference_id;
   const shippingAddress = session.metadata;
@@ -191,6 +208,23 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     : cart.totalCartPrice;
 
   const totalOrderPrice = cartPrice + taxPrice + shippingPrice;
+
+  const dollarToEgp = await getDollarToEgpRate();
+  const stripeMinUSD = 0.5;
+  const minAllowToEgp = dollarToEgp * stripeMinUSD;
+
+  if (totalOrderPrice < minAllowToEgp) {
+    return next(
+      new AppError(
+        `إجمالي الطلب (${totalOrderPrice.toFixed(
+          2
+        )} جنيه) أقل من الحد الأدنى المطلوب من Stripe (${minAllowToEgp.toFixed(
+          2
+        )} جنيه حسب سعر الدولار الحالي).`,
+        400
+      )
+    );
+  }
 
   // 3) Create stripe checkout session
   const session = await stripe.checkout.sessions.create({

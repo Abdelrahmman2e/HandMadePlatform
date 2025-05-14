@@ -56,6 +56,11 @@ const productSchema = new mongoose.Schema(
         ref: "SubCategory",
       },
     ],
+    artisan: {
+      type: mongoose.Schema.ObjectId,
+      required: [true, "Product must be belong to artisan"],
+      ref: "User",
+    },
     currency: {
       type: String,
       required: true,
@@ -68,7 +73,7 @@ const productSchema = new mongoose.Schema(
     },
     weight: {
       type: Number, // Weight in kilograms
-    }, 
+    },
     ratingsAverage: {
       type: Number,
       min: [1, "Rating must be above or equal 1.0"],
@@ -90,7 +95,7 @@ productSchema.index({ price: 1, ratingsAverage: -1 });
 productSchema.index({ slug: 1 });
 
 productSchema.virtual("reviews", {
-  ref: "Review",
+  ref: "ratings",
   foreignField: "product",
   localField: "_id",
 });
@@ -102,6 +107,12 @@ productSchema.pre(/^find/, function (nxt) {
   });
   nxt();
 });
+productSchema.pre(/^find/, function (nxt) {
+  this.populate({
+    path: "artisan",
+    select: "name ",
+  });
+  nxt();
+});
 
 module.exports = mongoose.model("Product", productSchema);
-

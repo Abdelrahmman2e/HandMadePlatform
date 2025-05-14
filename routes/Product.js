@@ -10,6 +10,8 @@ const {
   aliasTopProducts,
   uploadProductImages,
   resizeProductImages,
+  createFilterObj,
+  setArtisanIdToBody,
 } = require("../controller/productController");
 
 /**
@@ -27,7 +29,7 @@ const {
 
 const { protect, restrictTo } = require("../controller/authController");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use("/:productId/reviews", reviewRouter);
 
@@ -35,11 +37,13 @@ router.route("/top-rated").get(aliasTopProducts, getProducts);
 
 router
   .route("/")
-  .get(getProducts)
+  .get(createFilterObj, getProducts)
   .post(
     protect,
-    restrictTo("admin", "artisan"),
+    restrictTo("artisan", "admin"),
     uploadProductImages,
+    resizeProductImages,
+    setArtisanIdToBody,
     createProductValidator,
     createProduct
   );
@@ -48,11 +52,11 @@ router
   .route("/:id")
   .get(getProductValidator, getProduct)
   .patch(
-    updateProductValidator,
     protect,
     restrictTo("admin", "artisan"),
     uploadProductImages,
     resizeProductImages,
+    updateProductValidator,
     updateProduct
   )
   .delete(

@@ -74,9 +74,6 @@ app.use(
 );
 
 //routes
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subCategories", subCategoryRouter);
 app.use("/api/v1/users", userRouter);

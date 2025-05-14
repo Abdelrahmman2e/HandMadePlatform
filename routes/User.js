@@ -1,6 +1,7 @@
 const express = require("express");
 
-const orderRouter = require("./Order");
+const productRouter = require("./Product");
+
 const {
   getUser,
   getUsers,
@@ -24,8 +25,6 @@ const {
   restrictTo,
 } = require("../controller/authController");
 
-// const {} = require("../middlewares/uploadImageMW");
-
 const {
   getUserValidator,
   createUserValidator,
@@ -41,7 +40,7 @@ const {
 
 const router = express.Router();
 
-// router.use("/:userId/orders", orderRouter);
+router.use("/:userId/products", productRouter);
 
 router.post("/signUp", signUpValidator, signUp);
 router.post("/login", loginValidator, login);

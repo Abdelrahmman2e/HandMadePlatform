@@ -8,18 +8,18 @@ exports.createReviewValidator = [
     .withMessage("Review rating value is required")
     .isFloat({ min: 1, max: 5 })
     .withMessage("Review rating value must be between 1 to 5"),
-  check("user")
+  check("user_id")
     .notEmpty()
     .withMessage("Review must belong to a user")
     .isMongoId()
     .withMessage("Invalid Review id format"),
-  check("product")
+  check("prod_id")
     .notEmpty()
     .withMessage("Review must belong to a product")
     .isMongoId()
     .withMessage("Invalid Review id format")
     .custom((val, { req }) =>
-      Review.findOne({ user: req.user.id, product: req.body.product }).then(
+      Review.findOne({ user_id: req.user.id, prod_id: req.body.prod_id }).then(
         (review) => {
           if (review) {
             return Promise.reject(
@@ -65,9 +65,6 @@ exports.updateReviewValidator = [
 ];
 
 exports.getReviewsValidator = [
-  check("productId")
-    .optional()
-    .isMongoId()
-    .withMessage("Invalid Id Format..!!"),
+  check("prod_id").optional().isMongoId().withMessage("Invalid Id Format..!!"),
   validatorMW,
 ];

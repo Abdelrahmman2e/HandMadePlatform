@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const sharp = require("sharp");
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/AppError");
+const { v4: uuidv4 } = require("uuid");
 const { uploadSingleImage } = require("../middlewares/uploadImageMW");
 
 const {
@@ -14,20 +15,22 @@ const {
 
 exports.uploadUserPhoto = uploadSingleImage("profile_picture");
 
-exports.resizeUserPhoto = asyncHandler(async (req, res, nxt) => {
-  if (!req.file) return nxt();
+// Image processing
+exports.resizeUserPhoto = asyncHandler(async (req, res, next) => {
+  const filename = `user-${uuidv4()}-${Date.now()}.jpeg`;
 
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  if (req.file) {
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("jpeg")
+      .jpeg({ quality: 95 })
+      .toFile(`public/img/users/${filename}`);
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
+    // Save image into our db
+    req.body.profile_picture = filename;
+  }
 
-  req.body.profile_picture = req.file.filename;
-
-  nxt();
+  next();
 });
 
 exports.getMe = (req, res, nxt) => {

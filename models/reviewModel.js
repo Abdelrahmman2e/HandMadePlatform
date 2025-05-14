@@ -17,12 +17,12 @@ const reviewSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    product: {
+    prod_id: {
       type: mongoose.Schema.ObjectId,
       ref: "Product",
       required: [true, "Review must belong to a product"],
     },
-    user: {
+    user_id: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
       required: [true, "Review must belong to user"],
@@ -33,7 +33,7 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-reviewSchema.index({ product: 1, user: 1 }, { unique: true });
+reviewSchema.index({ prod_id: 1, user: 1 }, { unique: true });
 
 // reviewSchema.pre(/^find/, function (next) {
 //   this.populate({
@@ -47,18 +47,18 @@ reviewSchema.index({ product: 1, user: 1 }, { unique: true });
 // });
 
 reviewSchema.pre(/^find/, function (next) {
-  this.populate({ path: "user", select: "name" });
+  this.populate({ path: "user_id", select: "name" });
   next();
 });
 
 reviewSchema.statics.calcAverageRatings = async function (productId) {
   const stats = await this.aggregate([
     {
-      $match: { product: productId },
+      $match: { prod_id: productId },
     },
     {
       $group: {
-        _id: "$product",
+        _id: "$prod_id",
         nRating: { $sum: 1 },
         avgRating: { $avg: "$rating" },
       },
@@ -99,4 +99,4 @@ reviewSchema.post(/^findOneAnd/, async function () {
   await this.r.constructor.calcAverageRatings(this.r.product);
 });
 
-module.exports = mongoose.model("Review", reviewSchema);
+module.exports = mongoose.model("ratings", reviewSchema);

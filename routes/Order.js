@@ -24,13 +24,7 @@ router.get("/checkout-session/:cartId", checkoutSession);
 
 router.route("/:cartId").post(restrictTo("user"), createCashOrder);
 
-// router.route("/:id").get(restrictTo("admin", "artisan"), getOrder);
-
-router.put("/:id/pay", restrictTo("admin", "artisan"), updateOrderToPaid);
-router.put(
-  "/:id/deliver",
-  restrictTo("admin", "artisan"),
-  updateOrderToDelivered
-);
+router.put("/:id/pay", restrictTo("admin"), updateOrderToPaid);
+router.put("/:id/deliver", restrictTo("admin"), updateOrderToDelivered);
 
 module.exports = router;
