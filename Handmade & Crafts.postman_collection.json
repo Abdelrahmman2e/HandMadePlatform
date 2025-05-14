@@ -1,0 +1,1365 @@
+{
+	"info": {
+		"_postman_id": "30e87c18-90df-491d-816b-153fbcaaead2",
+		"name": "Handmade & Crafts",
+		"description": "**The Handmade and Crafts Plaform** is a platform that connects artisans and craft enthusiasts with buyers seeking unique, handmade products. It empowers small businesses and individuals by providing a digital storefront to showcase their creations, targeting artisans who want to sell their products online and buyers looking for custom-made, one-of-a-kind items.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30170877",
+		"_collection_link": "https://speeding-trinity-621849.postman.co/workspace/My-Workspace~e496bd79-a893-4358-8a80-37b43d29c7a2/collection/30170877-30e87c18-90df-491d-816b-153fbcaaead2?action=share&source=collection_link&creator=30170877"
+	},
+	"item": [
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/categories",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"categories"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "wood",
+									"description": " Search for categories by name.",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"description": "Specify the page number (default is 1).",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "Number of items per page (default is 10).",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "name",
+									"description": "Sort the results by a specific field (e.g., name, createdAt).",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint retrieves a list of all categories. Each category provides details such as its name, ID, and other relevant metadata."
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Specific Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/categories/67202355d523263ea72e1132"
+					},
+					"response": []
+				},
+				{
+					"name": "Create  a new Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Wood\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Specific Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"wood crafts\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/categories/67202355d523263ea72e1132"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Specific Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/categories/6749dffc318b6f200186115c"
+					},
+					"response": []
+				}
+			],
+			"description": "Represents a classification for organizing products in the platform. Each category groups similar handmade and craft items, such as jewelry, apparel, or pottery, to enhance searchability and user experience."
+		},
+		{
+			"name": "Subcategory",
+			"item": [
+				{
+					"name": "Get All Subcategories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/subcategories?limit=5&page=2",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"subcategories"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Specific Subcategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/subCategories/67202355d523263ea72e1132"
+					},
+					"response": []
+				},
+				{
+					"name": "Create  a new Subcategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"test2\",\r\n    \"category\":\"6749dffc318b6f200186115c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/subCategories"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Specific Subcategory",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{URL}}api/v1/subCategories/67202355d523263ea72e1132"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Specific Subcategory",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/subCategories/67202355d523263ea72e1132"
+					},
+					"response": []
+				}
+			],
+			"description": "A more specific classification within a broader category. Subcategories allow for finer organization of products, enabling users to filter and search for items more easily. For example, within the \"Jewelry\" category, subcategories might include \"Necklaces,\" \"Earrings,\" or \"Bracelets.\""
+		},
+		{
+			"name": "Sub/Category",
+			"item": [
+				{
+					"name": "Get a list of Subcategories for specific Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/categories/6749de8cd1f5d0f1c9518a94/subcategories"
+					},
+					"response": []
+				},
+				{
+					"name": "Create  Subcategory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/categories/6749de8cd1f5d0f1c9518a94/subcategories"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get a list of Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/products",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "price[gt]",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "ratingsAverage[gte]",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "fields",
+									"value": "title,description,materials,colors",
+									"disabled": true
+								},
+								{
+									"key": "keyword",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "ratingsQuantity",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "quantity[gt]",
+									"value": "5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get top-rated Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/products/top-rated",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"products",
+								"top-rated"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Specific Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/products/676e0d1a15e7f03c0154c163"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"title\": \"test\",\r\n        \"description\": \"\",\r\n        \"quantity\": 60,\r\n        \"sold\": 30,\r\n        \"price\": 40.00,\r\n        \"priceAfterDiscount\": 35.00,\r\n        \"colors\": [\r\n            \"white\",\r\n            \"cream\"\r\n        ],\r\n        \"imageCover\": \"https://example.com/images/macrame_wall_hanging_1.jpg\",\r\n        \"images\": [\r\n            \"https://example.com/images/macrame_wall_hanging_1.jpg\",\r\n            \"https://example.com/images/macrame_wall_hanging_2.jpg\"\r\n        ],\r\n        \"category\": \"6749de8cd1f5d0f1c9518a94\",\r\n        \"subcategories\": [\r\n            \"6749df7f318b6f2001861157\"\r\n        ],\r\n        \"currency\": \"USD\",\r\n        \"materials\": [\r\n            \"macrame\",\r\n            \"cotton\"\r\n        ],\r\n        \"weight\": 0.8,\r\n        \"ratingsQuantity\": 10\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/products"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Specific Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/products/676e0d1a15e7f03c0154c163"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Specific Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/products/677a959688b3841273890a40"
+					},
+					"response": []
+				}
+			],
+			"description": "Represents an individual handmade item listed in the platform. Each product includes details such as name, description, price, images, and associated category or subcategory. Products can be custom-made, unique, or crafted to customer specifications, offering a personalized shopping experienc."
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Get a list of Reviews",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Specific Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/reviews/676e0d1a15e7f03c0154c164"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\":\"Very Good\",\r\n    \"rating\":3.9,\r\n    \"user_id\":\"6819dc33e71276964ad3a36b\",\r\n    \"prod_id\":\"681434aec272b71d34d3834b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Specific Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\":\"The Product is Excellent\",\r\n    \"rating\":5\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/reviews/6819dd5de78eff7be077b171"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Specific Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/reviews/6750b54c1a8bcaa8cbbad5bb"
+					},
+					"response": []
+				}
+			],
+			"description": "Represents feedback provided by buyers about a product or seller. Each review includes a rating , a text comment, and metadata such as the reviewer's ID and the date of submission. Reviews help other buyers make informed purchasing decisions by sharing experiences and opinions on products."
+		},
+		{
+			"name": "Product/Reviews",
+			"item": [
+				{
+					"name": "Create new Review on Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\":\"The Product is Excelent\",\r\n    \"rating\":4.3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/products/674d0cad953cda22703f8c10/reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reviews on Specific Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/products/677a959688b3841273890a40/reviews"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abdelrahman Mostafa\",\r\n    \"email\":\"abdo@gmail.io\",\r\n    \"password\":\"pass1234\",\r\n    \"passwordConfirm\":\"pass1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Specific User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abdelrahman Mostafa\",\r\n    \"email\":\"abdo@gmail.io\",\r\n    \"password\":\"pass1234\",\r\n    \"passwordConfirm\":\"pass1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/672a62554073e2b70b80d25c"
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abdelrahman Mostafa\",\r\n    \"email\":\"abdo@gmail.io\",\r\n    \"password\":\"pass1234\",\r\n    \"passwordConfirm\":\"pass1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Specific User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abdelrahman Mostafa\",\r\n    \"email\":\"abdo@gmail.io\",\r\n    \"password\":\"pass1234\",\r\n    \"passwordConfirm\":\"pass1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/672d795d864798881d178894"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abdelrahman Mostafa\",\r\n    \"email\":\"abdo@gmail.io\",\r\n    \"password\":\"pass1234\",\r\n    \"passwordConfirm\":\"pass1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Current User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Abdel.Rahman Mostafa",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "profile_picture",
+									"type": "file",
+									"src": "/C:/Users/I SEvEN/OneDrive/Pictures/uploads/users/image.jpeg"
+								}
+							]
+						},
+						"url": "{{URL}}api/v1/users/updateMe"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/users/me"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Current User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/users/deleteMe"
+					},
+					"response": []
+				}
+			],
+			"description": "Represents an individual registered on the platform, either as a buyer, seller, or both. Each user has a unique identifier, personal details (e.g., name, email), and associated roles and permissions (e.g., buyer, seller). Users can create, manage, and purchase products, as well as leave reviews and interact with the Platform."
+		},
+		{
+			"name": "Artisan/Product",
+			"item": [
+				{
+					"name": "Get all products of a specific artisan",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create a product for a specific artisan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Handcrafted Leather Wallet\",\r\n    \"description\": \"This is a premium quality handcrafted leather wallet, designed for those who appreciate elegant simplicity and durability. Made with the finest leather and precision stitching, it ensures longevity and a luxurious feel.\",\r\n    \"quantity\": 120,\r\n    \"sold\": 45,\r\n    \"price\": 350.50,\r\n    \"priceAfterDiscount\": 300.00,\r\n    \"colors\": [\r\n        \"brown\",\r\n        \"black\"\r\n    ],\r\n    \"imageCover\": \"https://example.com/images/leather-wallet-cover.jpg\",\r\n    \"images\": [\r\n        \"https://example.com/images/leather-wallet-1.jpg\",\r\n        \"https://example.com/images/leather-wallet-2.jpg\",\r\n        \"https://example.com/images/leather-wallet-3.jpg\"\r\n    ],\r\n    \"category\": \"67b4f055f5865bf3c39fe7c2\", \r\n    \r\n    \"currency\": \"USD\",\r\n    \"materials\": [\r\n        \"Leather\",\r\n        \"Thread\"\r\n    ],\r\n    \"weight\": 0.2,\r\n    \"ratingsAverage\": 4.5,\r\n    \"ratingsQuantity\": 58\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/6816e53512d1b501b1ffd651/products"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/signUp",
+						"description": "Creates a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"amostafa12e2@gmail.com\",\r\n    \"password\": \"password123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/login",
+						"description": "Authenticates user credentials and returns JWT token"
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"amostafa12e1@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/forgotPassword",
+						"description": "Request a password reset token."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"newpass123\",\r\n    \"passwordConfirm\":\"newpass123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/resetPassword/6f1ce5822e7242d1a482ce07ecf8cde932f071470771cf3b7d6b2dbe9b312925"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Current User Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\":\"pass1234\",\r\n    \"password\":\"updatePassword\",\r\n    \"passwordConfirm\":\"updatePassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/users/updateMyPassword/67476349bdaea5e19bc4ac3d"
+					},
+					"response": []
+				}
+			],
+			"description": "This section manages user access to the platform, ensuring secure registration, login, and password management. It includes endpoints for user signup, login, password reset, and token validation, enabling both authentication and role-based authorization for access to protected resources."
+		},
+		{
+			"name": "Wishlist",
+			"item": [
+				{
+					"name": "Get all Product in wishList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/wishLists"
+					},
+					"response": []
+				},
+				{
+					"name": "Add product to wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\":\"676e0d1a15e7f03c0154c163\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/wishLists"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Specific product from wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/wishLists/676e0d1a15e7f03c0154c163"
+					},
+					"response": []
+				}
+			],
+			"description": "The Wishlist feature allows users to save products or services they are interested in for future reference. This feature enhances the user experience by enabling them to keep track of desired items without making an immediate purchase. Users can easily add or remove items from their wishlist and access it anytime for a seamless shopping experience."
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Get all adresses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/addresses"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new Address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"alias\":\"Joe\",\r\n    \"details\":\"Helmyat Elzayton\",\r\n    \"phone\":\"01017800349\",\r\n    \"city\":\"Cairo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/addresses"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a specific address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/addresses/677bd1051b509d5eca348579"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coupons",
+			"item": [
+				{
+					"name": "Get All Coupons",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/coupons"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a specific Coupon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/coupons/678349324177b04c2dd5c069"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new Coupon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"couponTest\",\r\n    \"expire\":\"2025-10-9\",\r\n    \"discount\":30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/coupons"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a specific Coupon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"expire\":\"2025-12-2\",\r\n    \"discount\":80\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/coupons/678349324177b04c2dd5c069"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a specific Coupon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/coupons/678349324177b04c2dd5c069"
+					},
+					"response": []
+				}
+			],
+			"description": "A **coupon system** to provide discounts and special promotions. Sellers can create and manage coupons to attract buyers, boost sales, and reward loyal customers. Buyers can apply coupon codes at checkout to receive discounts on eligible purchases."
+		},
+		{
+			"name": "Shopping_Cart",
+			"item": [
+				{
+					"name": "Get all Products in Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/carts"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product to Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\":\"676e0d1a15e7f03c0154c165\",\r\n    \"color\":\"white\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/carts"
+					},
+					"response": []
+				},
+				{
+					"name": "Apply Coupon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"couponTest\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/carts/applyCoupon"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quantity for Specific item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\":10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/carts/67837e8185a9a2bd6524ed81"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Item form Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/carts/678371b3f2f3ab64ab5cd680"
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}api/v1/carts"
+					},
+					"response": []
+				}
+			],
+			"description": "A **Shopping Cart** is a virtual container that allows users to add, update, and remove products they wish to purchase. It tracks selected items, quantities, and prices, providing a total cost. Users can review their cart before proceeding to checkout, where they finalize their order by providing payment and shipping details."
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "create Cash Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shippingAddress\": {\r\n    \"details\": \"123 main Street, Apt 5c\",\r\n    \"phone\": \"+201017800349\",\r\n    \"city\": \"Cairo\",\r\n    \"postalCode\": \"16584\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}api/v1/orders/67f8bdced1332f6781f8363d"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order (payment)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{URL}}api/v1/orders/67f8ae1b0556ef8ab13b5b67/pay"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order (delivery)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{URL}}api/v1/orders/67f8ae1b0556ef8ab13b5b67/deliver"
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout Session",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{jwt}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}api/v1/orders/checkout-session/68133d008b2acc8ec41ea284"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
