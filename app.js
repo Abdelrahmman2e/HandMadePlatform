@@ -14,6 +14,8 @@ const addressRouter = require("./routes/Address");
 const couponRouter = require("./routes/Coupon");
 const cartRouter = require("./routes/Cart");
 const orderRouter = require("./routes/Order");
+const recommendationsRouter = require("./routes/Recommendation");
+const chatBotRouter = require("./routes/Chatbot");
 const { webhookCheckout } = require("./controller/orderController");
 const AppError = require("./utils/AppError");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -23,7 +25,6 @@ const compression = require("compression");
 const cors = require("cors");
 
 const app = express();
-
 
 app.use(cors());
 app.options("*", cors());
@@ -84,6 +85,8 @@ app.use("/api/v1/addresses", addressRouter);
 app.use("/api/v1/coupons", couponRouter);
 app.use("/api/v1/carts", cartRouter);
 app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/recommendations", recommendationsRouter);
+app.use("/api/v1/chatbot", chatBotRouter);
 
 app.all("*", (req, res, nxt) => {
   nxt(

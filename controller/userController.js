@@ -12,6 +12,7 @@ const {
   updateOne,
   createOne,
 } = require("./handlersFactory");
+const AppError = require("../utils/AppError");
 
 exports.uploadUserPhoto = uploadSingleImage("profile_picture");
 
@@ -72,4 +73,54 @@ exports.updateMe = asyncHandler(async (req, res, nxt) => {
     return nxt(new ApiError(`No User for this id ${req.params.id}`, 404));
   }
   res.status(200).json({ data: user });
+});
+
+exports.requestArtisanRole = asyncHandler(async (req, res, nxt) => {
+  const user = await User.findById(req.user.id);
+
+  if (user.artisanRequest.status === "pending") {
+    return nxt(new AppError("You already have a pending request.", 400));
+  }
+
+  user.artisanRequest = {
+    status: "pending",
+    reason: req.body.reason || "",
+    requestedAt: new Date(),
+  };
+
+  await user.save({ validateBeforeSave: false });
+  res.json({ message: "Artisan role request submitted." });
+});
+
+exports.getPendingRequests = asyncHandler(async (req, res) => {
+  const pendingUsers = await User.find({
+    "artisanRequest.status": "pending",
+  }).select("name email artisanRequest");
+  res.json(pendingUsers);
+});
+
+// Controller: admin updates the artisanRequest status + user role
+exports.updateRequestStatus = asyncHandler(async (req, res, nxt) => {
+  const { userId } = req.params;
+  const { status } = req.body;
+
+  if (!["approved", "rejected"].includes(status)) {
+    return nxt(new AppError(`Invalid Status..!!`, 400));
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return nxt(new AppError(`No user for this id`, 404));
+  }
+  if (user.artisanRequest.status !== "pending") {
+    return nxt(new AppError("No pending request found.", 400));
+  }
+
+  user.artisanRequest.status = status;
+  if (status === "approved") {
+    user.role = "artisan";
+  }
+  await user.save({ validateBeforeSave: false });
+
+  res.json({ message: `Request ${status}`, user });
 });

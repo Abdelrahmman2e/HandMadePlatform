@@ -32,7 +32,11 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    totalOrderPrice: Number,
+    totalOrderPrice: {
+      type: Number,
+      required: true,
+      min: [30, "Total order price must be at least 30 EGP"],
+    },
     paymentMethodType: {
       type: String,
       enum: ["cash", "card"],

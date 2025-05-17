@@ -75,7 +75,6 @@ exports.createCashOrder = asyncHandler(async (req, res, nxt) => {
   });
 });
 
-// exports.findAllOrders = getAll(Order);
 exports.findAllOrders = asyncHandler(async (req, res, next) => {
   let filter = {};
 
@@ -244,6 +243,8 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   const taxPrice = 0;
   const shippingPrice = 0;
 
+  
+
   // 1) Get cart depend on cartId
   const cart = await Cart.findById(req.params.cartId);
   if (!cart) {
@@ -296,7 +297,7 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     customer_email: req.user.email,
     client_reference_id: req.params.cartId,
     metadata: {
-      shippingAddress: JSON.stringify(req.body.shippingAddress),
+      shippingAddress: JSON.stringify(req.user.shippingAddress),
     },
     payment_method_types: ["card"],
     payment_intent_data: {

@@ -10,9 +10,16 @@ const {
 
 const router = express.Router();
 
-router.use(protect, restrictTo("admin", "artisan"));
+router.use(protect);
 
-router.route("/").get(getCoupons).post(createCoupon);
-router.route("/:id").get(getCoupon).delete(deleteCoupon).patch(updateCoupon);
+router
+  .route("/")
+  .get(restrictTo("admin"), getCoupons)
+  .post(restrictTo("admin", "artisan"), createCoupon);
+router
+  .route("/:id")
+  .get(restrictTo("admin"), getCoupon)
+  .delete(restrictTo("admin"), deleteCoupon)
+  .patch(restrictTo("admin", "artisan"), updateCoupon);
 
 module.exports = router;

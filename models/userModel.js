@@ -26,6 +26,15 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "artisan", "admin"],
       default: "user",
     },
+    artisanRequest: {
+      status: {
+        type: String,
+        enum: ["none", "pending", "approved", "rejected"],
+        default: "none",
+      },
+      reason: String,
+      requestedAt: Date,
+    },
     password: {
       type: String,
       required: true,

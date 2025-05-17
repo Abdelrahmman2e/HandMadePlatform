@@ -12,6 +12,9 @@ const {
   updateMe,
   uploadUserPhoto,
   resizeUserPhoto,
+  requestArtisanRole,
+  getPendingRequests,
+  updateRequestStatus,
 } = require("../controller/userController");
 
 const {
@@ -62,13 +65,23 @@ router.patch(
 );
 router.delete("/deleteMe", deleteMe);
 
+router.route("/request-artisan").post(restrictTo("user"), requestArtisanRole);
+
 router.use(restrictTo("admin"));
 
 router.route("/").post(createUserValidator, createUser).get(getUsers);
+
+router.get("/artisan-requests", getPendingRequests);
+
+// Admin updates request status (approve/reject)
+router.patch("/artisan-requests/:userId", updateRequestStatus);
+
 router
   .route("/:id")
   .get(getUserValidator, getUser)
   .patch(updateUserValidator, updateUser)
   .delete(deleteUserValidator, deleteUser);
+
+// Admin views pending requests
 
 module.exports = router;

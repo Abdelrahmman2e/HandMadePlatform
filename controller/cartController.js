@@ -20,6 +20,10 @@ exports.addProductToCart = asyncHandler(async (req, res, nxt) => {
 
   const product = await Product.findById(productId);
 
+  if (!product) {
+    return nxt(new AppError(`No Product for this id: ${productId}`, 404));
+  }
+
   if (product.quantity == 0) {
     return nxt(new AppError(`Product is out of stock`, 400));
   }
