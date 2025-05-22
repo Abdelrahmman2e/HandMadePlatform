@@ -4,6 +4,8 @@ const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/AppError");
 const { v4: uuidv4 } = require("uuid");
 const { uploadSingleImage } = require("../middlewares/uploadImageMW");
+const approveArtisanEmailHtml = require("../utils/templates/approveArtisanEmail");
+const rejectArtisanEmailHtml = require("../utils/templates/rejectArtisanEmail");
 
 const {
   deleteOne,
@@ -13,6 +15,7 @@ const {
   createOne,
 } = require("./handlersFactory");
 const AppError = require("../utils/AppError");
+const sendEmail = require("../utils/email");
 
 exports.uploadUserPhoto = uploadSingleImage("profile_picture");
 
@@ -77,6 +80,7 @@ exports.updateMe = asyncHandler(async (req, res, nxt) => {
 
 exports.requestArtisanRole = asyncHandler(async (req, res, nxt) => {
   const user = await User.findById(req.user.id);
+  console.log(user);
 
   if (user.artisanRequest.status === "pending") {
     return nxt(new AppError("You already have a pending request.", 400));
@@ -121,6 +125,28 @@ exports.updateRequestStatus = asyncHandler(async (req, res, nxt) => {
     user.role = "artisan";
   }
   await user.save({ validateBeforeSave: false });
+
+  const subject =
+    status === "approved"
+      ? "تمت الموافقة على طلبك لتصبح حرفي"
+      : "تم رفض طلبك لتصبح حرفي";
+
+  const message =
+    status === "approved"
+      ? `تهانينا ${user.name}، تمت الموافقة على طلبك لتصبح حرفيًا.`
+      : `مرحبًا ${user.name}، نأسف، تم رفض طلبك لتصبح حرفيًا.`;
+
+  const html =
+    status === "approved"
+      ? approveArtisanEmailHtml(user.name)
+      : rejectArtisanEmailHtml(user.name);
+
+  await sendEmail({
+    email: user.email,
+    subject,
+    message,
+    html,
+  });
 
   res.json({ message: `Request ${status}`, user });
 });
