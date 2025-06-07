@@ -14,11 +14,7 @@ const {
   setArtisanIdToBody,
 } = require("../controller/productController");
 
-/**
- * git remote add origin https://github.com/Abdelrahmman2e/Hand_Made.git
-git branch -M main
-git push -u origin main
- */
+
 
 const {
   getProductValidator,

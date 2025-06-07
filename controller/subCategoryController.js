@@ -1,4 +1,8 @@
 const Subcategory = require("../models/subCategoryModel");
+const asyncHandler = require("express-async-handler");
+const { v4: uuidv4 } = require("uuid");
+const cloudinary = require("../config/cloudinary");
+const { uploadSingleImage } = require("../middlewares/uploadImageMW");
 
 const {
   deleteOne,
@@ -31,6 +35,7 @@ exports.setCategoryIdToBody = (req, res, nxt) => {
 // @route   POST /api/v1/subcategories
 // @access  Private/Admin-Artisan
 exports.createSubCategory = createOne(Subcategory);
+
 // @desc    Get a specific subcategory by id
 // @route   GET /api/v1/subcategories/:id
 // @access  Public
@@ -45,3 +50,30 @@ exports.updateSubCategory = updateOne(Subcategory);
 // @route   DELETE /api/v1/subcategories/:id
 // @access  Private/Admin-Artisan
 exports.deleteSubCategory = deleteOne(Subcategory);
+
+// Upload single image
+exports.uploadSubCategoryImage = uploadSingleImage("image");
+
+// Image processing
+exports.resizeImage = asyncHandler(async (req, res, next) => {
+  if (!req.file) return next();
+
+  const base64Data = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+
+  const result = await cloudinary.uploader.upload(
+    base64Data,
+    {
+      folder: "subcategory_images",
+      public_id: `subcategory-${uuidv4()}-${Date.now()}`,
+      transformation: [
+        { width: 600, height: 600, crop: "fill" },
+        { quality: "auto" },
+        { fetch_format: "auto" },
+      ],
+    }
+  );
+
+  // Save image into our db
+  req.body.image = result.secure_url;
+  next();
+});

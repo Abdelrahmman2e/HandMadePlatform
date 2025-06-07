@@ -1,41 +1,71 @@
 const User = require("../models/userModel");
-const sharp = require("sharp");
 const asyncHandler = require("express-async-handler");
-const ApiError = require("../utils/AppError");
 const { v4: uuidv4 } = require("uuid");
+const cloudinary = require("../config/cloudinary");
 const { uploadSingleImage } = require("../middlewares/uploadImageMW");
+const { deleteOne, updateOne, getOne, getAll } = require("./handlersFactory");
+const AppError = require("../utils/AppError");
 const approveArtisanEmailHtml = require("../utils/templates/approveArtisanEmail");
 const rejectArtisanEmailHtml = require("../utils/templates/rejectArtisanEmail");
-
-const {
-  deleteOne,
-  getAll,
-  getOne,
-  updateOne,
-  createOne,
-} = require("./handlersFactory");
-const AppError = require("../utils/AppError");
 const sendEmail = require("../utils/email");
 
-exports.uploadUserPhoto = uploadSingleImage("profile_picture");
+// Upload single image
+exports.uploadUserImage = uploadSingleImage("profile_picture");
 
 // Image processing
-exports.resizeUserPhoto = asyncHandler(async (req, res, next) => {
-  const filename = `user-${uuidv4()}-${Date.now()}.jpeg`;
+exports.resizeImage = asyncHandler(async (req, res, next) => {
+  if (!req.file) return next();
 
-  if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`public/img/users/${filename}`);
+  const base64Data = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
 
-    // Save image into our db
-    req.body.profile_picture = filename;
-  }
+  const result = await cloudinary.uploader.upload(base64Data, {
+    folder: "user_images",
+    public_id: `user-${uuidv4()}-${Date.now()}`,
+    transformation: [
+      { width: 600, height: 600, crop: "fill" },
+      { quality: "auto" },
+      { fetch_format: "auto" },
+    ],
+  });
 
+  // Save image into our db
+  req.body.profile_picture = result.secure_url;
   next();
 });
+
+// const streamifier = require("streamifier");
+
+// exports.resizeImage = asyncHandler(async (req, res, next) => {
+//   if (!req.file) return next();
+
+//   const streamUpload = () =>
+//     new Promise((resolve, reject) => {
+//       const stream = cloudinary.uploader.upload_stream(
+//         {
+//           folder: "user_images",
+//           public_id: `user-${uuidv4()}-${Date.now()}`,
+//           transformation: [
+//             { width: 600, height: 600, crop: "fill" },
+//             { quality: "auto" },
+//             { fetch_format: "auto" },
+//           ],
+//         },
+//         (error, result) => {
+//           if (result) {
+//             resolve(result);
+//           } else {
+//             reject(error);
+//           }
+//         }
+//       );
+//       streamifier.createReadStream(req.file.buffer).pipe(stream);
+//     });
+
+//   const result = await streamUpload();
+//   req.body.profile_picture = result.secure_url;
+//   next();
+// });
+
 
 exports.getMe = (req, res, nxt) => {
   req.params.id = req.user.id;
@@ -44,7 +74,10 @@ exports.getMe = (req, res, nxt) => {
 
 exports.getUsers = getAll(User);
 
-exports.createUser = createOne(User);
+exports.createUser = asyncHandler(async (req, res, next) => {
+  const user = await User.create(req.body);
+  res.status(201).json({ data: user });
+});
 
 exports.getUser = getOne(User);
 
@@ -61,7 +94,7 @@ exports.deleteUser = deleteOne(User);
 exports.updateMe = asyncHandler(async (req, res, nxt) => {
   if (req.body.password || req.body.passwordConfirm) {
     return nxt(
-      new ApiError(
+      new AppError(
         "This route is not for password updates. please use /updatePassword",
         400
       )
@@ -73,7 +106,7 @@ exports.updateMe = asyncHandler(async (req, res, nxt) => {
   });
 
   if (!user) {
-    return nxt(new ApiError(`No User for this id ${req.params.id}`, 404));
+    return nxt(new AppError(`No User for this id ${req.params.id}`, 404));
   }
   res.status(200).json({ data: user });
 });

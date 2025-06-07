@@ -28,6 +28,7 @@ const createCookie = (token, res) => {
 };
 
 exports.signUp = asyncHandler(async (req, res, nxt) => {
+  
   const newUser = await User.create(req.body);
   const token = signToken(newUser._id);
   newUser.password = undefined;

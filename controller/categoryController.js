@@ -1,34 +1,39 @@
 const Category = require("../models/categoryModel");
-const { v4: uuidv4 } = require("uuid");
-const { uploadSingleImage } = require("../middlewares/uploadImageMW");
 const asyncHandler = require("express-async-handler");
-const sharp = require("sharp");
-
+const { v4: uuidv4 } = require("uuid");
+const cloudinary = require("../config/cloudinary");
+const { uploadSingleImage } = require("../middlewares/uploadImageMW");
 const {
   deleteOne,
-  getAll,
-  getOne,
   updateOne,
+  getOne,
+  getAll,
   createOne,
 } = require("./handlersFactory");
 
+// Upload single image
 exports.uploadCategoryImage = uploadSingleImage("image");
 
 // Image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
-  const filename = `category-${uuidv4()}-${Date.now()}.jpeg`;
+  if (!req.file) return next();
 
-  if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`public/img/categories/${filename}`);
+  const base64Data = `data:${
+    req.file.mimetype
+  };base64,${req.file.buffer.toString("base64")}`;
 
-    // Save image into our db
-    req.body.image = filename;
-  }
+  const result = await cloudinary.uploader.upload(base64Data, {
+    folder: "category_images",
+    public_id: `category-${uuidv4()}-${Date.now()}`,
+    transformation: [
+      { width: 600, height: 600, crop: "fill" },
+      { quality: "auto" },
+      { fetch_format: "auto" },
+    ],
+  });
 
+  // Save image into our db
+  req.body.image = result.secure_url;
   next();
 });
 

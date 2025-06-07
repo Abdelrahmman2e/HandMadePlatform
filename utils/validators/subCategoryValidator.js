@@ -7,7 +7,7 @@ exports.getSubCategoryValidator = [
   check("id").isMongoId().withMessage("Invalid ID format..!!"),
   validatorMW,
 ];
-exports.updateSUbCategoryValidator = [
+exports.updateSubCategoryValidator = [
   check("id").isMongoId().withMessage("Invalid ID format..!!"),
   check("name")
     .notEmpty()

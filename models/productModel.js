@@ -16,6 +16,10 @@ const productSchema = new mongoose.Schema(
       lowercase: true,
       // unique: true,
     },
+    size: {
+      type: String,
+      default: "One Size",
+    },
     description: {
       type: String,
       required: [true, "Product description is required"],
@@ -66,10 +70,6 @@ const productSchema = new mongoose.Schema(
       required: true,
       enum: ["USD", "EGP", "EUR"], // List of allowed currencies
       default: "EGP",
-    },
-    materials: {
-      type: [String], // Array of strings for materials
-      default: [],
     },
     weight: {
       type: Number, // Weight in kilograms

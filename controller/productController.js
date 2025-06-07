@@ -1,7 +1,7 @@
 const Product = require("../models/productModel");
 const asyncHandler = require("express-async-handler");
 const { v4: uuidv4 } = require("uuid");
-const sharp = require("sharp");
+const cloudinary = require("../config/cloudinary");
 const {
   deleteOne,
   updateOne,
@@ -34,38 +34,46 @@ exports.uploadProductImages = uploadMixOfImages([
 exports.resizeProductImages = asyncHandler(async (req, res, nxt) => {
   if (!req.files || !req.files.imageCover || !req.files.images) return nxt();
 
+  // Upload cover image to Cloudinary
   if (req.files.imageCover) {
-    const imageCoverFileName = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
-
-    await sharp(req.files.imageCover[0].buffer)
-      .resize(2000, 1333)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`public/img/products/${imageCoverFileName}`);
-
-    // Save image into our db
-    req.body.imageCover = imageCoverFileName;
+    const base64Data = `data:${
+      req.files.imageCover[0].mimetype
+    };base64,${req.files.imageCover[0].buffer.toString("base64")}`;
+    const result = await cloudinary.uploader.upload(base64Data, {
+      folder: "product_images",
+      public_id: `product-${uuidv4()}-${Date.now()}-cover`,
+      transformation: [
+        { width: 2000, height: 1333, crop: "fill" },
+        { quality: "auto" },
+        { fetch_format: "auto" },
+      ],
+    });
+    req.body.imageCover = result.secure_url;
   }
-  //2- Image processing for images
+
+  // Upload additional images to Cloudinary
   if (req.files.images) {
     req.body.images = [];
     await Promise.all(
       req.files.images.map(async (img, index) => {
-        const imageName = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpeg`;
-
-        await sharp(img.buffer)
-          .resize(2000, 1333)
-          .toFormat("jpeg")
-          .jpeg({ quality: 95 })
-          .toFile(`public/img/products/${imageName}`);
-
-        // Save image into our db
-        req.body.images.push(imageName);
+        const result = await cloudinary.uploader.upload(
+          `data:${img.mimetype};base64,${img.buffer.toString("base64")}`,
+          {
+            folder: "product_images",
+            public_id: `product-${uuidv4()}-${Date.now()}-${index + 1}`,
+            transformation: [
+              { width: 2000, height: 1333, crop: "fill" },
+              { quality: "auto" },
+              { fetch_format: "auto" },
+            ],
+          }
+        );
+        req.body.images.push(result.secure_url);
       })
     );
-
-    nxt();
   }
+
+  nxt();
 });
 
 exports.setArtisanIdToBody = (req, res, nxt) => {

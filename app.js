@@ -53,6 +53,7 @@ const limiter = rateLimit({
 
 app.use("/api", limiter);
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "10Kb" }));
 
 // Data Sanitization against NoSQL Query injection

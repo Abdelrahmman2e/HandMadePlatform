@@ -46,11 +46,11 @@ router
     deleteCategory
   )
   .patch(
-    updateCategoryValidator,
     protect,
     restrictTo("admin", "artisan"),
     uploadCategoryImage,
     resizeImage,
+    updateCategoryValidator,
     updateCategory
   );
 

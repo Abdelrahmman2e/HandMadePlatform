@@ -10,8 +10,8 @@ const {
   updateUser,
   getMe,
   updateMe,
-  uploadUserPhoto,
-  resizeUserPhoto,
+  uploadUserImage,
+  resizeImage,
   requestArtisanRole,
   getPendingRequests,
   updateRequestStatus,
@@ -45,7 +45,7 @@ const router = express.Router();
 
 router.use("/:userId/products", productRouter);
 
-router.post("/signUp", signUpValidator, signUp);
+router.post("/signUp", uploadUserImage, resizeImage, signUpValidator, signUp);
 router.post("/login", loginValidator, login);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
@@ -58,8 +58,8 @@ router.get("/me", getMe, getUser);
 
 router.patch(
   "/updateMe",
-  uploadUserPhoto,
-  resizeUserPhoto,
+  uploadUserImage,
+  resizeImage,
   updateMeValidator,
   updateMe
 );

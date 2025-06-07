@@ -9,7 +9,7 @@ const {
 } = require("./handlersFactory");
 
 exports.setProductAndUserIdToBody = (req, res, nxt) => {
-  if (!req.body.prod_id) req.body.prod_id = req.params.productId;
+  if (!req.body.product) req.body.product = req.params.productId;
   if (!req.body.user_id) req.body.user_id = req.user.id;
 
   nxt();
@@ -17,7 +17,7 @@ exports.setProductAndUserIdToBody = (req, res, nxt) => {
 
 exports.createFilterObj = (req, res, nxt) => {
   let filterObj = {};
-  if (req.params.productId) filterObj = { prod_id: req.params.productId };
+  if (req.params.productId) filterObj = { product: req.params.productId };
   req.filterObj = filterObj;
   nxt();
 };

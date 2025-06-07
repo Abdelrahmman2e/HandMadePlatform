@@ -1,6 +1,7 @@
 const { check, param } = require("express-validator");
 const validatorMW = require("../../middlewares/validatorMW");
 const Review = require("../../models/reviewModel");
+
 exports.createReviewValidator = [
   check("review").optional(),
   check("rating")
@@ -13,13 +14,13 @@ exports.createReviewValidator = [
     .withMessage("Review must belong to a user")
     .isMongoId()
     .withMessage("Invalid Review id format"),
-  check("prod_id")
+  check("product")
     .notEmpty()
     .withMessage("Review must belong to a product")
     .isMongoId()
     .withMessage("Invalid Review id format")
     .custom((val, { req }) =>
-      Review.findOne({ user_id: req.user.id, prod_id: req.body.prod_id }).then(
+      Review.findOne({ user_id: req.user.id, product: req.body.product }).then(
         (review) => {
           if (review) {
             return Promise.reject(
@@ -29,17 +30,6 @@ exports.createReviewValidator = [
         }
       )
     ),
-  // .custom((val, { req }) =>
-  //   Review.findOne({ user: req.user.id, product: req.body.product }).then(
-  //     (review) => {
-  //       if (review) {
-  //         Promise.reject(
-  //           new Error(`You already created a review before..!!`)
-  //         );
-  //       }
-  //     }
-  //   )
-  // )
   validatorMW,
 ];
 
@@ -65,6 +55,6 @@ exports.updateReviewValidator = [
 ];
 
 exports.getReviewsValidator = [
-  check("prod_id").optional().isMongoId().withMessage("Invalid Id Format..!!"),
+  check("product").optional().isMongoId().withMessage("Invalid Id Format..!!"),
   validatorMW,
 ];

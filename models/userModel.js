@@ -47,7 +47,8 @@ const userSchema = new mongoose.Schema(
     },
     profile_picture: {
       type: String,
-      default: "default.jpg",
+      default:
+        "https://res.cloudinary.com/dpgetgkkd/image/upload/v1749266254/296fe121-5dfa-43f4-98b5-db50019738a7_wwm1ym.jpg",
     },
     Phone: String,
     birthDate: Date,

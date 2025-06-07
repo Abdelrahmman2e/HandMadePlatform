@@ -17,7 +17,7 @@ const reviewSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    prod_id: {
+    product: {
       type: mongoose.Schema.ObjectId,
       ref: "Product",
       required: [true, "Review must belong to a product"],
@@ -33,7 +33,7 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-reviewSchema.index({ prod_id: 1, user: 1 }, { unique: true });
+reviewSchema.index({ product: 1, user: 1 }, { unique: true });
 
 // reviewSchema.pre(/^find/, function (next) {
 //   this.populate({
@@ -47,18 +47,18 @@ reviewSchema.index({ prod_id: 1, user: 1 }, { unique: true });
 // });
 
 reviewSchema.pre(/^find/, function (next) {
-  this.populate({ path: "user_id", select: "name" });
+  this.populate({ path: "user_id", select: "name,profile_picture" });
   next();
 });
 
 reviewSchema.statics.calcAverageRatings = async function (productId) {
   const stats = await this.aggregate([
     {
-      $match: { prod_id: productId },
+      $match: { product: productId },
     },
     {
       $group: {
-        _id: "$prod_id",
+        _id: "$product",
         nRating: { $sum: 1 },
         avgRating: { $avg: "$rating" },
       },

@@ -135,11 +135,7 @@ exports.createProductValidator = [
     .withMessage("Product currency is required")
     .isIn(["USD", "EGP", "EUR"])
     .withMessage("Currency must be one of USD, EGP, or EUR."),
-  check("materials")
-    .notEmpty()
-    .withMessage("Product materials is required")
-    .isArray()
-    .withMessage("Materials must be an array of strings."),
+  check("weight").optional().isNumeric().withMessage("Weight must be a number"),
   validatorMW,
 ];
 
@@ -272,12 +268,7 @@ exports.updateProductValidator = [
     .optional()
     .isIn(["USD", "EGP", "EUR"])
     .withMessage("Currency must be one of USD, EGP, or EUR."),
-
-  check("materials")
-    .optional()
-    .isArray()
-    .withMessage("Materials must be an array of strings."),
-
+  check("weight").optional().isNumeric().withMessage("Weight must be a number"),
   validatorMW,
 ];
 

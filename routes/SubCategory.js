@@ -6,6 +6,8 @@ const {
   createSubCategory,
   deleteSubCategory,
   updateSubCategory,
+  uploadSubCategoryImage,
+  resizeImage,
   createFilterObj,
   setCategoryIdToBody,
 } = require("../controller/subCategoryController");
@@ -13,7 +15,7 @@ const {
 const {
   createSubCategoryValidator,
   deleteSubCategoryValidator,
-  updateSUbCategoryValidator,
+  updateSubCategoryValidator,
   getSubCategoryValidator,
 } = require("../utils/validators/subCategoryValidator");
 
@@ -25,9 +27,11 @@ router
   .route("/")
   .post(
     setCategoryIdToBody,
-    createSubCategoryValidator,
     protect,
     restrictTo("admin", "artisan"),
+    uploadSubCategoryImage,
+    resizeImage,
+    createSubCategoryValidator,
     createSubCategory
   )
   .get(createFilterObj, getSubCategories);
@@ -41,9 +45,11 @@ router
     deleteSubCategory
   )
   .patch(
-    updateSUbCategoryValidator,
     protect,
     restrictTo("admin", "artisan"),
+    uploadSubCategoryImage,
+    resizeImage,
+    updateSubCategoryValidator,
     updateSubCategory
   );
 
