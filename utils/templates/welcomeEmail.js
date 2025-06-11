@@ -48,7 +48,7 @@ const welcomeEmailHtml = (name) => `
     <p>Thank you for joining the HandMade family. We're thrilled to have you with us!</p>
     <p>Explore unique, handcrafted products created with love by skilled artisans from around the world.</p>
 
-    <a href="https://d605-196-137-122-88.ngrok-free.app/api/v1/products" class="btn">Start Shopping</a>
+    <a href="https://moderncsis.sytes.net/handmade/products" class="btn">Start Shopping</a>
 
     <p>If you have any questions, feel free to reply to this email — we're here to help.</p>
 

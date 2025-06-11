@@ -51,7 +51,8 @@ exports.createUserValidator = [
     }),
   check("birthDate").optional().isDate().withMessage("Invalid Date Format..!!"),
   check("Phone")
-    .optional()
+    .notEmpty()
+    .withMessage("Phone is required..!!")
     .isMobilePhone()
     .withMessage("Invalid phone number format..!!"),
   validatorMW,

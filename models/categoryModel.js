@@ -22,21 +22,3 @@ const categorySchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Category", categorySchema);
-
-/*
-
-{
-  "_id": ObjectId,
-  "name": String,
-  "description": String,
-  "sub_categories": [
-    {
-      "name": String,
-      "description": String
-    }
-  ],
-  "created_at": Timestamp,
-  "deleted_at": Timestamp
-}
-
-*/

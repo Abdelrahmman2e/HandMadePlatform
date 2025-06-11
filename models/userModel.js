@@ -50,7 +50,9 @@ const userSchema = new mongoose.Schema(
       default:
         "https://res.cloudinary.com/dpgetgkkd/image/upload/v1749266254/296fe121-5dfa-43f4-98b5-db50019738a7_wwm1ym.jpg",
     },
-    Phone: String,
+    Phone: { 
+      type: String,
+       required: true },
     birthDate: Date,
 
     passwordChangedAt: Date,
@@ -140,34 +142,3 @@ userSchema.methods.createPasswordResetToken = function () {
 };
 
 module.exports = mongoose.model("User", userSchema);
-
-/**
- * 
-  {
-
-  "avatar": String,
-  "first_name": String,
-  "last_name": String,
-  "username": String,
-  "email": String,
-  "password": String,
-  "birth_date": Date,
-  "phone_number": String,
-  "addresses": [
-    {
-      "title": String,
-      "address_line_1": String,
-      "address_line_2": String,
-      "country": String,
-      "city": String,
-      "postal_code": String,
-      "landmark": String,
-      "phone_number": String
-    }
-  ],
-  "wishlist": [ObjectId], // Array of product IDs
-  "created_at": Timestamp,
-  "deleted_at": Timestamp
-}
-
- */
