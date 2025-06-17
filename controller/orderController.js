@@ -212,7 +212,6 @@ const createCardOrder = asyncHandler(async (session) => {
   const cart = await Cart.findById(cartId);
   const user = await User.findOne({ email: session.customer_email });
 
-  // 3) Create order with default paymentMethodType card
   const order = await Order.create({
     user: user._id,
     cartItems: cart.cartItems,
@@ -243,8 +242,6 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   const taxPrice = 0;
   const shippingPrice = 0;
 
-  
-
   // 1) Get cart depend on cartId
   const cart = await Cart.findById(req.params.cartId);
   if (!cart) {
@@ -259,6 +256,24 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     : cart.totalCartPrice;
 
   const totalOrderPrice = cartPrice + taxPrice + shippingPrice;
+
+  // Check if there's enough stock for all items in the cart
+  for (const item of cart.cartItems) {
+    const product = await Product.findById(item.product);
+
+    if (!product) {
+      return nxt(new AppError(`Product not found: ${item.product}`, 404));
+    }
+
+    if (product.quantity < item.quantity) {
+      return nxt(
+        new AppError(
+          `Insufficient stock for product ${product.title || product._id}`,
+          400
+        )
+      );
+    }
+  }
 
   const dollarToEgp = await getDollarToEgpRate();
   const stripeMinUSD = 0.5;
