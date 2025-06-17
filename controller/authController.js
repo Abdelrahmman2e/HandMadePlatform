@@ -28,7 +28,6 @@ const createCookie = (token, res) => {
 };
 
 exports.signUp = asyncHandler(async (req, res, nxt) => {
-  
   const newUser = await User.create(req.body);
   const token = signToken(newUser._id);
   newUser.password = undefined;
@@ -74,7 +73,6 @@ exports.login = asyncHandler(async (req, res, nxt) => {
 });
 
 exports.protect = asyncHandler(async (req, res, nxt) => {
-  // 1- Getting token
   let token;
   if (
     req.headers.authorization &&
@@ -82,7 +80,6 @@ exports.protect = asyncHandler(async (req, res, nxt) => {
   ) {
     token = req.headers.authorization.split(" ")[1];
   }
-
   if (!token) {
     return nxt(
       new AppError(
@@ -92,10 +89,8 @@ exports.protect = asyncHandler(async (req, res, nxt) => {
     );
   }
 
-  // 2- verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // 3- check if user is still exist
   const currentUser = await User.findById(decoded.userId);
 
   if (!currentUser) {
@@ -106,9 +101,6 @@ exports.protect = asyncHandler(async (req, res, nxt) => {
       )
     );
   }
-
-  // 4- check user changed password after token issued
-
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return nxt(
       new AppError(

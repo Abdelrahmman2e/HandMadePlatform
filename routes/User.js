@@ -1,7 +1,7 @@
 const express = require("express");
-
 const productRouter = require("./Product");
 
+// Import controllers
 const {
   getUser,
   getUsers,
@@ -15,6 +15,7 @@ const {
   requestArtisanRole,
   getPendingRequests,
   updateRequestStatus,
+  deleteProfilePicture,
 } = require("../controller/userController");
 
 const {
@@ -28,6 +29,7 @@ const {
   restrictTo,
 } = require("../controller/authController");
 
+// Import validators
 const {
   getUserValidator,
   createUserValidator,
@@ -43,19 +45,17 @@ const {
 
 const router = express.Router();
 
-router.use("/:userId/products", productRouter);
-
+// Public routes
 router.post("/signUp", uploadUserImage, resizeImage, signUpValidator, signUp);
 router.post("/login", loginValidator, login);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
 
+// Protected routes (require authentication)
 router.use(protect);
 
-router.patch("/updateMyPassword/:id", updatePassword);
-
+// User profile management
 router.get("/me", getMe, getUser);
-
 router.patch(
   "/updateMe",
   uploadUserImage,
@@ -64,17 +64,20 @@ router.patch(
   updateMe
 );
 router.delete("/deleteMe", deleteMe);
+router.delete("/deleteProfilePicture", deleteProfilePicture);
+router.patch("/updateMyPassword/:id", updatePassword);
 
+// Artisan role request
 router.route("/request-artisan").post(restrictTo("user"), requestArtisanRole);
 
+// Nested routes
+router.use("/:userId/products", productRouter);
+
+// Admin only routes
 router.use(restrictTo("admin"));
 
+// Admin user management
 router.route("/").post(createUserValidator, createUser).get(getUsers);
-
-router.get("/artisan-requests", getPendingRequests);
-
-// Admin updates request status (approve/reject)
-router.patch("/artisan-requests/:userId", updateRequestStatus);
 
 router
   .route("/:id")
@@ -82,6 +85,8 @@ router
   .patch(updateUserValidator, updateUser)
   .delete(deleteUserValidator, deleteUser);
 
-// Admin views pending requests
+// Admin artisan request management
+router.get("/artisan-requests", getPendingRequests);
+router.patch("/artisan-requests/:userId", updateRequestStatus);
 
 module.exports = router;

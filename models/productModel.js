@@ -16,6 +16,9 @@ const productSchema = new mongoose.Schema(
       lowercase: true,
       // unique: true,
     },
+    title_ar: {
+      type: String,
+    },
     size: {
       type: String,
       default: "One Size",

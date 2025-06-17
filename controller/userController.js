@@ -16,7 +16,9 @@ exports.uploadUserImage = uploadSingleImage("profile_picture");
 exports.resizeImage = asyncHandler(async (req, res, next) => {
   if (!req.file) return next();
 
-  const base64Data = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+  const base64Data = `data:${
+    req.file.mimetype
+  };base64,${req.file.buffer.toString("base64")}`;
 
   const result = await cloudinary.uploader.upload(base64Data, {
     folder: "user_images",
@@ -65,7 +67,6 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 //   req.body.profile_picture = result.secure_url;
 //   next();
 // });
-
 
 exports.getMe = (req, res, nxt) => {
   req.params.id = req.user.id;
@@ -182,4 +183,48 @@ exports.updateRequestStatus = asyncHandler(async (req, res, nxt) => {
   });
 
   res.json({ message: `Request ${status}`, user });
+});
+
+// Delete profile picture and revert to default
+exports.deleteProfilePicture = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  // If user has a custom profile picture (not the default one)
+  if (
+    user.profile_picture &&
+    !user.profile_picture.includes(
+      "296fe121-5dfa-43f4-98b5-db50019738a7_wwm1ym.jpg"
+    )
+  ) {
+    // Extract public_id from the URL
+    const publicId = user.profile_picture.split("/").slice(-1)[0].split(".")[0];
+
+    // Delete image from Cloudinary
+    try {
+      await cloudinary.uploader.destroy(publicId);
+    } catch (error) {
+      console.error("Error deleting image from Cloudinary:", error);
+    }
+  }
+
+  // Reset to default profile picture using findByIdAndUpdate to avoid validation
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      profile_picture:
+        "https://res.cloudinary.com/dpgetgkkd/image/upload/v1749266254/296fe121-5dfa-43f4-98b5-db50019738a7_wwm1ym.jpg",
+    },
+    { new: true, runValidators: false }
+  );
+
+  res.status(200).json({
+    status: "success",
+    message: "Profile picture deleted successfully",
+    data: {
+      user: updatedUser,
+    },
+  });
 });
